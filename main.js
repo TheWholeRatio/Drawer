@@ -26,9 +26,8 @@ io.on('connection', function(client) {
 
     client.on('playerJoined', function(data) {
 			//initialize a new player to the game
-			//client.emit('updateBlobs', blobs); sends back to client
       console.log("player joined")
-      client.emit('clientJoined', client.id);
+      client.emit('clientJoined', client.id); // sends to client
       io.emit('updateActions', session.actions);//sends to everyone
     });
 
@@ -36,16 +35,16 @@ io.on('connection', function(client) {
       line = data;
       session.actions.push(line);
       console.log("new mouse down");
-
-      session.actions.forEach((item)=>{
-        console.log(item.mousePoints);
-        console.log();
-      })
+      // session.actions.forEach((item)=>{
+      //   console.log(item.mousePoints);
+      //   console.log();
+      // })
     })
     client.on('updateClientLine', function(data) {
       for(var i = session.actions.length-1; i >= 0; i--){
         if(session.actions[i].clientId == client.id){
           session.actions[i].mousePoints.push(data);
+          break;
         }
       }
 			//client.broadcast.emit('updateActions', session.actions);
@@ -53,9 +52,9 @@ io.on('connection', function(client) {
     });
 
 
-    client.on('updatePlayerMovement', function(data) {
 
-      io.emit('circleUpdated', players);
-
-    });
+    client.on('updateActions', function(data){
+      session.actions = data;
+      io.emit('updateActions', session.actions);
+    })
 });

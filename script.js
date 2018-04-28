@@ -76,24 +76,26 @@ function draw(){
 	context.clearRect(0, 0, canvas.width, canvas.height);
 	context.strokeStyle="#000000";
 	context.lineWidth = 2;
-	for(var i = actions.length - 2; i < actions.length; i++){
+	for(var i = 0; i < actions.length; i++){
 		context.beginPath();
     const currentAction = actions[i];
-		for(var j = 0; j < actions[i].mousePoints.length; j++) {
-      const currentPoint = currentAction.mousePoints[j];
-      if (j === 0) {
-        context.strokeStyle='#000000';
-        context.moveTo(actions[i].mousePoints[j].x - offSet.x, actions[i].mousePoints[j].y - offSet.y);
-      } else {
-        context.strokeStyle='#ff0000';
-        context.lineTo(actions[i].mousePoints[j].x - offSet.x, actions[i].mousePoints[j].y - offSet.y);
+    if(currentAction.mousePoints !=null){
+      console.log("lets do it");
+      context.beginPath();
+      for(var j = 0; j < actions[i].mousePoints.length; j++) {
+        const currentPoint = currentAction.mousePoints[j];
+        if (j === 0) {
+          context.strokeStyle='#000000';
+          context.moveTo(actions[i].mousePoints[j].x - offSet.x, actions[i].mousePoints[j].y - offSet.y);
+        } else {
+          context.strokeStyle='#ff0000';
+          context.lineTo(actions[i].mousePoints[j].x - offSet.x, actions[i].mousePoints[j].y - offSet.y);
+        }
+        // context.moveTo(actions[i].mousePoints[j].x - offSet.x,actions[i].mousePoints[j].y - offSet.y);
+
       }
-
-
-      // context.moveTo(actions[i].mousePoints[j].x - offSet.x,actions[i].mousePoints[j].y - offSet.y);
-
-		}
-    context.stroke();
+      context.stroke();
+    }
 	}
 	requestAnimationFrame(draw);
 }
@@ -101,15 +103,13 @@ function draw(){
 
 //Listening
 socket.on('clientJoined', function(data) {
-	clientDrawer.id = socket.io.engine.id
-  console.log(clientDrawer.clientId);
-  //mousePoints = data;
-	console.log("got some mouse points");
+	clientDrawer.id = data
+  console.log(clientDrawer.id);
+  console.log(actions);
 });
 
 socket.on('updateActions', function(data) {
   actions = data;
-	console.log("got some mouse points");
 });
 
 
@@ -127,7 +127,6 @@ function getOffset( el ) {
 }
 
 function clearCanvas(){
-	mousePoints = [];
-	console.log("stuff")
-	socket.emit('updateMousePoints', mousePoints);
+	actions = [];
+	socket.emit('updateActions', actions);
 }
