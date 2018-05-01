@@ -31,15 +31,22 @@ io.on('connection', function(client) {
       io.emit('updateActions', session.actions);//sends to everyone
     });
 
+    //Add a new line to the action list
     client.on('addClientLine', function(data){
       line = data;
       session.actions.push(line);
-      console.log("new mouse down");
-      // session.actions.forEach((item)=>{
-      //   console.log(item.mousePoints);
-      //   console.log();
-      // })
     })
+    //Add circles (for eraser probably)
+    client.on('addClientEraserCircle', function(data){
+      line = data;
+      session.actions.push(line);
+    })
+    //Add rectangles?
+    client.on('addClientRectangle', function(data){
+      line = data;
+      session.actions.push(line);
+    })
+
     client.on('updateClientLine', function(data) {
       for(var i = session.actions.length-1; i >= 0; i--){
         if(session.actions[i].clientId == client.id){
@@ -47,14 +54,12 @@ io.on('connection', function(client) {
           break;
         }
       }
-			//client.broadcast.emit('updateActions', session.actions);
       io.emit('updateActions', session.actions);//sends to everyone
     });
 
-
-
-    client.on('updateActions', function(data){
-      session.actions = data;
+    client.on('clearActions', function(data){
+      session.actions = [];
+      console.log(session.actions);
       io.emit('updateActions', session.actions);
     })
 });

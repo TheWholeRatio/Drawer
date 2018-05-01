@@ -50,7 +50,7 @@ function handleMouseMove(event) {
           socket.emit('updateClientLine', point);
 				}
 }
-//actions will not work
+//Actions
 function handleMouseDown(event){
 	if(!isMouseDown){
     isMouseDown = true;
@@ -71,24 +71,26 @@ function handleMouseUp(event){
 	isMouseDown = false;
 }
 
+function changeColor(color){
+  clientDrawer.color = color;
+  console.log(clientDrawer.color);
+}
+
 
 function draw(){
 	context.clearRect(0, 0, canvas.width, canvas.height);
-	context.strokeStyle="#000000";
 	context.lineWidth = 2;
 	for(var i = 0; i < actions.length; i++){
 		context.beginPath();
     const currentAction = actions[i];
     if(currentAction.mousePoints !=null){
-      console.log("lets do it");
       context.beginPath();
       for(var j = 0; j < actions[i].mousePoints.length; j++) {
         const currentPoint = currentAction.mousePoints[j];
+        context.strokeStyle= currentAction.style;
         if (j === 0) {
-          context.strokeStyle='#000000';
           context.moveTo(actions[i].mousePoints[j].x - offSet.x, actions[i].mousePoints[j].y - offSet.y);
         } else {
-          context.strokeStyle='#ff0000';
           context.lineTo(actions[i].mousePoints[j].x - offSet.x, actions[i].mousePoints[j].y - offSet.y);
         }
         // context.moveTo(actions[i].mousePoints[j].x - offSet.x,actions[i].mousePoints[j].y - offSet.y);
@@ -110,6 +112,8 @@ socket.on('clientJoined', function(data) {
 
 socket.on('updateActions', function(data) {
   actions = data;
+  console.log(actions);
+  console.log("recieved new action");
 });
 
 
@@ -127,6 +131,6 @@ function getOffset( el ) {
 }
 
 function clearCanvas(){
-	actions = [];
-	socket.emit('updateActions', actions);
+  console.log("we are clearing the actions");
+	socket.emit('clearActions');
 }

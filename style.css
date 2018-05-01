@@ -30,5 +30,25 @@ body{
 	padding-bottom: 5px;
 	color: white;
 	font-size: 15;
+}
+.red-button{
+	background-color: #FF4040;
+	border-radius: 8px;
+	width: 100px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	color: white;
+	font-size: 15;
+	display: block;
+}
 
+.blue-button{
+	background-color: #4040FF;
+	border-radius: 8px;
+	width: 100px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	color: white;
+	font-size: 15;
+	display:block;
 }
